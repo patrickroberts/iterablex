@@ -4,14 +4,14 @@ Lazy method chaining iterables
 
 ## About
 
-This library exports a function to create a lazy iterable from any iterable object. The return value's type will depend on what the original iterable supports:
+This library exports a function to create a lazy iterable from any [iterable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_iterable_protocol). The return value's type will depend on what operations the original iterable supports:
 
-- A `ContiguousIterable` for any [`TypedArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)
-- A `RandomAccessIterable` for any iterable not above implementing a constant-time `.at(index)` method
-- A `ForwardIterable` for any iterable not above that can be iterated without consuming the input
-- An `InputIterable` for any other iterable not above
+- A `ContiguousRange` for any [`TypedArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)
+- A `RandomAccessRange` for any iterable not above implementing a constant-time `.at(index)` method
+- A `ForwardRange` for any iterable not above that can be iterated without consuming the input
+- An `InputRange` for any other iterable not above
 
-A `BidirectionalIterable` may be returned by some of the lazy methods for `ContiguousIterable`, `RandomAccessIterable`, and itself, to indicate the returned iterable supports lazy `.toReversed()` without buffering.
+A `BidirectionalRange` may be returned by some of the lazy methods for `ContiguousRange`, `RandomAccessRange`, and itself, to indicate the returned iterable supports lazy `.toReversed()` without buffering.
 
 ## Lazy methods:
 

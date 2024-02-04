@@ -1,7 +1,7 @@
-import type BasicIterable from '../interface/BasicIterable.js';
+import type Range from '../interface/Range.js';
 
 export default function* scan<T, U>(
-  iterable: BasicIterable<T>,
+  iterable: Range<T>,
   callbackFn: (accumulator: T | U, value: T, index: number) => T | U,
   ...initialValue: [] | [T | U]
 ): Generator<T | U> {

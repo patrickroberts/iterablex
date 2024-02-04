@@ -1,14 +1,14 @@
-import ForwardIterable from './ForwardIterable.js';
+import ForwardRange from './ForwardRange.js';
 
-export default abstract class BidirectionalIterable<T> extends ForwardIterable<T> {
-  public abstract entries(): BidirectionalIterable<[number, T]>;
+export default abstract class BidirectionalRange<T> extends ForwardRange<T> {
+  public abstract entries(): BidirectionalRange<[number, T]>;
 
-  public abstract filter<S extends T>(callbackFn: (value: T, index: number) => value is S): BidirectionalIterable<S>;
-  public abstract filter(callbackFn: (value: T, index: number) => boolean): BidirectionalIterable<T>;
+  public abstract filter<S extends T>(callbackFn: (value: T, index: number) => value is S): BidirectionalRange<S>;
+  public abstract filter(callbackFn: (value: T, index: number) => boolean): BidirectionalRange<T>;
 
-  public abstract map<U>(callbackFn: (value: T, index: number) => U): BidirectionalIterable<U>;
+  public abstract map<U>(callbackFn: (value: T, index: number) => U): BidirectionalRange<U>;
 
-  public abstract toReversed(): BidirectionalIterable<T>;
+  public abstract toReversed(): BidirectionalRange<T>;
 
   public findLast(callbackFn: (value: T, index: number) => boolean): T | undefined;
   public findLast<S extends T>(callbackFn: (value: T, index: number) => value is S): S | undefined;

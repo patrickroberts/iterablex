@@ -1,3 +1,3 @@
-export default interface BasicIterable<T> {
+export default interface Range<T> {
   [Symbol.iterator](): IterableIterator<T>;
 }

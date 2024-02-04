@@ -1,45 +1,40 @@
-import type BidirectionalIterable from './abstract/BidirectionalIterable.js';
-import type ContiguousIterable from './abstract/ContiguousIterable.js';
-import type ForwardIterable from './abstract/ForwardIterable.js';
-import InputIterable from './abstract/InputIterable.js';
-import type RandomAccessIterable from './abstract/RandomAccessIterable.js';
-import ArrayIterable from './class/ArrayIterable.js';
-import GeneratorIterable from './class/GeneratorIterable.js';
-import IteratorIterable from './class/IteratorIterable.js';
-import TypedArrayIterable from './class/TypedArrayIterable.js';
-import type BasicIterable from './interface/BasicIterable.js';
+import type BidirectionalRange from './abstract/BidirectionalRange.js';
+import type ContiguousRange from './abstract/ContiguousRange.js';
+import type ForwardRange from './abstract/ForwardRange.js';
+import InputRange from './abstract/InputRange.js';
+import type RandomAccessRange from './abstract/RandomAccessRange.js';
+import ArrayRange from './class/ArrayRange.js';
+import GeneratorRange from './class/GeneratorRange.js';
+import IteratorRange from './class/IteratorRange.js';
+import TypedArrayRange from './class/TypedArrayRange.js';
+import type Range from './interface/Range.js';
 import type TypedArray from './interface/TypedArray.js';
 
-function lazily<T>(contiguous: ContiguousIterable<T>): ContiguousIterable<T>;
-function lazily<T>(randomAccess: RandomAccessIterable<T>): RandomAccessIterable<T>;
-function lazily<T>(bidirectional: BidirectionalIterable<T>): BidirectionalIterable<T>;
-function lazily<T>(forward: ForwardIterable<T>): ForwardIterable<T>;
-function lazily<T>(input: InputIterable<T>): InputIterable<T>;
-function lazily<T>(typedArray: BigInt64Array | BigUint64Array): ContiguousIterable<bigint>;
-function lazily<T>(typedArray: Float32Array | Float64Array | Int16Array | Int32Array | Int8Array | Uint16Array | Uint32Array | Uint8Array | Uint8ClampedArray): ContiguousIterable<number>;
-function lazily<T>(array: T[]): RandomAccessIterable<T>;
-function lazily<T>(string: string): RandomAccessIterable<string>;
-function lazily<K, V>(map: Map<K, V>): ForwardIterable<[K, V]>;
-function lazily<T>(set: Set<T>): ForwardIterable<T>;
-function lazily<T>(generator: Generator<T>): InputIterable<T>;
-function lazily<T>(iterable: BasicIterable<T>): BasicIterable<T> {
-  if (iterable instanceof InputIterable) {
-    return iterable;
+function lazily<T>(contiguous: ContiguousRange<T> | TypedArray<T>): ContiguousRange<T>;
+function lazily<T>(array: RandomAccessRange<T> | T[]): RandomAccessRange<T>;
+function lazily(string: string): RandomAccessRange<string>;
+function lazily<T>(bidirectional: BidirectionalRange<T>): BidirectionalRange<T>;
+function lazily<T>(forward: ForwardRange<T> | Set<T>): ForwardRange<T>;
+function lazily<K, V>(map: Map<K, V>): ForwardRange<[K, V]>;
+function lazily<T>(input: InputRange<T> | Generator<T>): InputRange<T>;
+function lazily<T>(range: Range<T>): Range<T> {
+  if (range instanceof InputRange) {
+    return range;
   }
 
-  if (iterable instanceof Object.getPrototypeOf(Uint8Array)) {
-    return new TypedArrayIterable(iterable as Extract<TypedArray, BasicIterable<T>>);
+  if (range instanceof Object.getPrototypeOf(Uint8Array)) {
+    return new TypedArrayRange(range as TypedArray<T>);
   }
 
-  if (Array.isArray(iterable) || typeof iterable === 'string') {
-    return new ArrayIterable(iterable as T[], value => value);
+  if (Array.isArray(range) || typeof range === 'string') {
+    return new ArrayRange(range, value => value);
   }
 
-  if ('next' in Object(iterable) && typeof Object(iterable).next === 'function') {
-    return new IteratorIterable(iterable as IterableIterator<T>);
+  if ('next' in Object(range) && typeof Object(range).next === 'function') {
+    return new IteratorRange(range as IterableIterator<T>);
   }
 
-  return new GeneratorIterable(iterable);
+  return new GeneratorRange(range);
 }
 
 export default lazily;
